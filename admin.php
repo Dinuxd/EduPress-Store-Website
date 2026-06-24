@@ -1,6 +1,7 @@
 <?php
 // admin.php
 session_start();
+require_once __DIR__ . '/db.php';
 
 // 1) Only allow admin@edupress.lk
 if (!isset($_SESSION['user_id'])
@@ -10,14 +11,10 @@ if (!isset($_SESSION['user_id'])
   exit;
 }
 
-$page_title = 'Admin – EduPress Store';
+$page_title = 'Admin - EduPress Store';
 include 'header.php';
 
-// 2) Connect to DB
-$conn = mysqli_connect('localhost','root','', 'edupress_db');
-if (!$conn) {
-  die('DB error: '. mysqli_connect_error());
-}
+$conn = get_db_connection();
 
 // 3) Handle “Add New Product”
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {

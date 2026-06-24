@@ -1,6 +1,6 @@
 <?php
 // cart.php
-$page_title = 'Cart – EduPress Store';
+$page_title = 'Cart - EduPress Store';
 include 'header.php';
 ?>
 

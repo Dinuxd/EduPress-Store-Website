@@ -1,6 +1,6 @@
 <?php
 session_start();
-$page_title = 'Upload & Print – EduPress Store';
+$page_title = 'Upload & Print - EduPress Store';
 include 'header.php';
 
 // Only allow logged in users
@@ -22,28 +22,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($pages <= 0) {
       $error = 'Pages must be greater than 0.';
     } else {
-      // Save file
       $origName = basename($_FILES['file']['name']);
-      $safeName = uniqid()."_".$origName;
-      move_uploaded_file($_FILES['file']['tmp_name'], __DIR__."/uploads/$safeName");
+      $extension = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+      $allowedExtensions = ['pdf', 'doc', 'docx'];
 
-      // Calculate price (Rs.10 per page normal, Rs.15 per page color)
-      $pricePerPage = $options === 'color' ? 15 : 10;
-      $totalPrice = $pages * $pricePerPage;
+      if (!in_array($extension, $allowedExtensions, true)) {
+        $error = 'Only PDF, DOC, and DOCX files are allowed.';
+      } else {
+        $uploadDir = __DIR__ . '/uploads';
+        if (!is_dir($uploadDir)) {
+          mkdir($uploadDir, 0755, true);
+        }
 
-      // Store print job in session cart
-      if (!isset($_SESSION['print_cart'])) {
-        $_SESSION['print_cart'] = [];
+        $safeName = uniqid('', true) . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $origName);
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . '/' . $safeName);
+
+        $pricePerPage = $options === 'color' ? 15 : 10;
+        $totalPrice = $pages * $pricePerPage;
+
+        if (!isset($_SESSION['print_cart'])) {
+          $_SESSION['print_cart'] = [];
+        }
+        $_SESSION['print_cart'][] = [
+          'filename' => $safeName,
+          'orig_name' => $origName,
+          'pages' => $pages,
+          'options' => $options,
+          'price' => $totalPrice
+        ];
+
+        $success = "File uploaded and added to your cart (Rs. $totalPrice)";
       }
-      $_SESSION['print_cart'][] = [
-        'filename' => $safeName,
-        'orig_name' => $origName,
-        'pages' => $pages,
-        'options' => $options,
-        'price' => $totalPrice
-      ];
-
-      $success = "File uploaded and added to your cart (Rs. $totalPrice)";
     }
   }
 }

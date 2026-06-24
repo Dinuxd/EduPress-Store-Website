@@ -1,6 +1,7 @@
 <?php
   // index.php
-  $page_title = 'Home – EduPress Store';
+  require_once __DIR__ . '/db.php';
+  $page_title = 'Home - EduPress Store';
   include 'header.php';
 ?>
 
@@ -55,7 +56,7 @@
   <h2>Featured Products</h2>
   <div class="product-grid">
     <?php
-      $conn = mysqli_connect('localhost','root','','edupress_db');
+      $conn = get_db_connection();
       $res  = mysqli_query($conn, "SELECT * FROM products LIMIT 4");
       while($p = mysqli_fetch_assoc($res)):
     ?>

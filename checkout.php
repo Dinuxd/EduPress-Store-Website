@@ -1,13 +1,10 @@
 <?php
 // checkout.php
-$page_title = 'Checkout – EduPress Store';
+require_once __DIR__ . '/db.php';
+$page_title = 'Checkout - EduPress Store';
 include 'header.php';
 
-// 1) Connect to the database
-$conn = mysqli_connect('localhost','root','', 'edupress_db');
-if (!$conn) {
-  die('DB error: '.mysqli_connect_error());
-}
+$conn = get_db_connection();
 
 // 2) Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

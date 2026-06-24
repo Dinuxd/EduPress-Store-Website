@@ -1,15 +1,11 @@
 <?php
 // api/product.php
 header('Content-Type: application/json');
+require_once __DIR__ . '/../db.php';
+
 $id = intval($_GET['id'] ?? 0);
 
-// connect
-$conn = mysqli_connect('localhost','root','', 'edupress_db');
-if (!$conn) {
-  http_response_code(500);
-  echo json_encode(['error'=>'DB connection failed']);
-  exit;
-}
+$conn = get_db_connection();
 
 // fetch
 $sql = "SELECT id, name, price FROM products WHERE id = $id";

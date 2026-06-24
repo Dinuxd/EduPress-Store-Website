@@ -1,7 +1,8 @@
 <?php
 // login.php
 session_start();
-$page_title = 'Login – EduPress Store';
+require_once __DIR__ . '/db.php';
+$page_title = 'Login - EduPress Store';
 include 'header.php';
 
 // If already logged in, redirect
@@ -18,11 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (empty($email) || empty($pass)) {
     $error = 'Both fields are required.';
   } else {
-    // 1) Connect to DB
-    $conn = mysqli_connect('localhost','root','', 'edupress_db');
-    if (!$conn) {
-      die('DB error: '.mysqli_connect_error());
-    }
+    $conn = get_db_connection();
 
     // 2) Lookup user
     $email_safe = mysqli_real_escape_string($conn, $email);

@@ -1,13 +1,10 @@
 <?php
 // shop.php
-$page_title = 'Shop – EduPress Store';
+require_once __DIR__ . '/db.php';
+$page_title = 'Shop - EduPress Store';
 include 'header.php';
 
-// 1) Connect to the database
-$conn = mysqli_connect('localhost','root','', 'edupress_db');
-if (!$conn) {
-  die('Database connection error: ' . mysqli_connect_error());
-}
+$conn = get_db_connection();
 $search = trim($_GET['search'] ?? '');
 
 // 2) Fetch all products

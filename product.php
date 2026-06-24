@@ -1,6 +1,7 @@
 <?php
 // product.php
-$page_title = 'Product Details – EduPress Store';
+require_once __DIR__ . '/db.php';
+$page_title = 'Product Details - EduPress Store';
 include 'header.php';
 
 // 1) Get & validate product ID
@@ -11,11 +12,7 @@ if ($prod_id <= 0) {
   exit;
 }
 
-// 2) Connect to DB
-$conn = mysqli_connect('localhost','root','', 'edupress_db');
-if (!$conn) {
-  die('DB error: '.mysqli_connect_error());
-}
+$conn = get_db_connection();
 
 // 3) Fetch product
 $res = mysqli_query($conn,

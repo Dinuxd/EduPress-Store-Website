@@ -1,7 +1,8 @@
 <?php
 // register.php
 session_start();
-$page_title = 'Register – EduPress Store';
+require_once __DIR__ . '/db.php';
+$page_title = 'Register - EduPress Store';
 include 'header.php';
 
 // Handle form submission
@@ -20,11 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } elseif ($password !== $password2) {
     $error = 'Passwords do not match.';
   } else {
-    // 3) Connect to DB
-    $conn = mysqli_connect('localhost','root','', 'edupress_db');
-    if (!$conn) {
-      die('DB connection error: ' . mysqli_connect_error());
-    }
+    $conn = get_db_connection();
 
     // 4) Check if email exists
     $email_safe = mysqli_real_escape_string($conn, $email);

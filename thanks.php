@@ -1,6 +1,7 @@
 <?php
 // thanks.php
-$page_title = 'Thank You – EduPress Store';
+require_once __DIR__ . '/db.php';
+$page_title = 'Thank You - EduPress Store';
 include 'header.php';
 
 // 1) Get & validate order_id
@@ -12,11 +13,7 @@ if ($order_id <= 0) {
   exit;
 }
 
-// 2) Connect to DB
-$conn = mysqli_connect('localhost','root','', 'edupress_db');
-if (!$conn) {
-  die('DB error: '.mysqli_connect_error());
-}
+$conn = get_db_connection();
 
 // 3) Fetch order info
 $orderRes = mysqli_query($conn,
@@ -69,11 +66,18 @@ $itemsRes = mysqli_query($conn,
     </tfoot>
   </table>
 
-  <p><a href="shop.php">Continue Shopp
+  <p><a href="shop.php">Continue Shopping</a></p>
+</section>
+
 <script>
-  console.log('🗑️ About to clear cart, before:', localStorage.getItem('edupress_cart'));
   localStorage.removeItem('edupress_cart');
-  console.log('🗑️ After clear:', localStorage.getItem('edupress_cart'));
-  // Also reset the badge immediately
-  document.getElementById('cart-count').innerText = '0';
+  const cartCount = document.getElementById('cart-count');
+  if (cartCount) {
+    cartCount.innerText = '0';
+  }
 </script>
+
+<?php
+mysqli_close($conn);
+include 'footer.php';
+?>
